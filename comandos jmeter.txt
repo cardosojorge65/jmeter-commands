@@ -58,3 +58,20 @@ jmeter -g resultado.jtl -o nomeMinhaDashBoard
 Exemplo 5 - Executar um teste usando proxy:
 
 jmeter -n -t meu_plano.jmx -l resultado.jtl -H my.proxy.server -P 8080
+
+
+
+JMeter é uma ferramenta poderosa para teste de API. Digamos que você esteja escrevendo casos de teste para um de seus serviços RESTful; e você deseja extrair e validar o valor retornado como parte do cabeçalho de resposta.
+
+É um pouco complicado extrair o valor do cabeçalho da resposta no JMeter, mas é possível. Por exemplo, seu serviço RESTful retorna "ETag" no cabeçalho de resposta. Quando você olha para os dados de resposta brutos, o valor é exibido mais ou menos assim:
+ETag: 2666d92fa9ebf10250acdb235546f045
+Para obter o valor exato deste cabeçalho de resposta no JMeter:
+Clique com o botão direito em sua solicitação HTTP e adicione o elemento Post Processor - Regular Expression Extractor
+Botão de seleção - amostra principal apenas
+Selecione Radio button - Cabeçalhos de Resposta
+Digite algum nome na seção Nome de referência - por exemplo, eTagVariable
+Digite esta expressão na seção Expressão de referência - ETag: \ s + (. +)
+IMPORTANTE: esta expressão selecionará o parâmetro de cabeçalho de resposta ETag e selecionar tudo após o espaço em branco de dois pontos, ou seja, o valor real do parâmetro de cabeçalho de resposta ETag.
+Digite isso na seção Modelo - $ 1 $
+Agora, o valor ETag é armazenado como variável JMeter e você pode usá-lo para validação ou para passar a próxima solicitação HTTP.
+Para obter o valor, use $ {eTagVariable}
